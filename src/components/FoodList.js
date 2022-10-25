@@ -12,7 +12,15 @@ function FoodListItem({ item }) {
 }
 
 function FoodList({ items }) {
-  return <ul></ul>;
+  return (
+    <ul>
+      {items.map((item) => (
+        <li>
+          <FoodListItem item={item} />
+        </li>
+      ))}
+    </ul>
+  );
 }
 
 export default FoodList;
