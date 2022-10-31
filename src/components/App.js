@@ -47,6 +47,7 @@ function App() {
     handleLoad({
       order,
       cursor,
+      search,
     });
   };
 
@@ -60,8 +61,9 @@ function App() {
   useEffect(() => {
     handleLoad({
       order,
+      search,
     });
-  }, [order]);
+  }, [order, search]);
 
   return (
     <div>
@@ -77,7 +79,7 @@ function App() {
           더보기
         </button>
       )}
-      {loadingError && <p>{loadingError.message}</p>}
+      {loadingError?.message && <p>{loadingError.message}</p>}
     </div>
   );
 }
