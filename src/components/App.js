@@ -57,6 +57,10 @@ function App() {
     setSearch(e.target["search"].value);
   };
 
+  const handleSubmitSuccess = (newItem) => {
+    setItems((prevItems) => [newItem, ...prevItems]);
+  };
+
   const sortedItems = items.sort((a, b) => b[order] - a[order]);
 
   useEffect(() => {
@@ -68,7 +72,7 @@ function App() {
 
   return (
     <div>
-      <FoodForm />
+      <FoodForm onSubmitSuccess={handleSubmitSuccess} />
       <button onClick={handleNewestClick}>최신순</button>
       <button onClick={handleCalorieClick}>칼로리순</button>
       <form onSubmit={handleSearchSubmit}>
