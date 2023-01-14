@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { deleteFood, createFood, updateFood, getFoods } from "../api";
-import LocaleContext from "../contexts/LocaleContext";
+import { createFood, updateFood, getFoods, deleteFood } from "../api";
 import FoodList from "./FoodList";
 import FoodForm from "./FoodForm";
+import { LocaleProvider } from "../contexts/LocaleContext";
+import LocaleSelect from "./LocaleSelect";
 
 function App() {
   const [order, setOrder] = useState("createdAt");
@@ -15,14 +16,6 @@ function App() {
   const handleNewestClick = () => setOrder("createdAt");
 
   const handleCalorieClick = () => setOrder("calorie");
-
-  const handleDelete = async (id) => {
-    const result = await deleteFood(id);
-    if (!result) return;
-
-    const nextItems = items.filter((item) => item.id !== id);
-    setItems(nextItems);
-  };
 
   const handleLoad = async (options) => {
     let result;
@@ -76,6 +69,14 @@ function App() {
     });
   };
 
+  const handleDelete = async (id) => {
+    const result = await deleteFood(id);
+    if (!result) return;
+
+    const nextItems = items.filter((item) => item.id !== id);
+    setItems(nextItems);
+  };
+
   const sortedItems = items.sort((a, b) => b[order] - a[order]);
 
   useEffect(() => {
@@ -86,8 +87,8 @@ function App() {
   }, [order, search]);
 
   return (
-    <div>
-      <LocaleContext value="ko">
+    <LocaleProvider value="ko">
+      <div>
         <FoodForm onSubmit={createFood} onSubmitSuccess={handleCreateSuccess} />
         <button onClick={handleNewestClick}>최신순</button>
         <button onClick={handleCalorieClick}>칼로리순</button>
@@ -95,6 +96,7 @@ function App() {
           <input name="search" />
           <button type="submit">검색</button>
         </form>
+        <LocaleSelect />
         <FoodList
           items={sortedItems}
           onUpdate={updateFood}
@@ -107,8 +109,8 @@ function App() {
           </button>
         )}
         {loadingError && <p>{loadingError.message}</p>}
-      </LocaleContext>
-    </div>
+      </div>
+    </LocaleProvider>
   );
 }
 
